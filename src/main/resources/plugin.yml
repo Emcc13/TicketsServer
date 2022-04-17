@@ -1,0 +1,33 @@
+name: TicketsServer
+author: Emcc13
+description: TicketsServer
+version: 0.6.1
+depend: [Essentials]
+api-version: 1.18
+
+main: com.github.Emcc13.TicketsServer
+
+commands:
+  ticket:
+    description: player command
+  tickets:
+    description: team command
+  gticket:
+    description: generic ticket command
+  pluginticket:
+    description: plugin command
+  hiddenticket:
+    description: plugin/team-command to create a ticket which doesn't appear in the user list command and doesn't need to be read when closed
+  ticketserverreload:
+    description: reload plugin config
+
+permissions:
+  ticket.player:
+    default: true
+    description: player-permission
+  ticket.team:
+    default: false
+    description: team-permission
+  ticket.reload:
+    default: false
+    description: permission to reload config
