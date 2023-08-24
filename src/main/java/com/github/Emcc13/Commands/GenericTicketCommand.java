@@ -6,7 +6,6 @@ import com.github.Emcc13.Config.ConfigManager;
 import com.github.Emcc13.ServerMessages.ServerMessage;
 import com.github.Emcc13.TicketsServer;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -26,9 +25,8 @@ public class GenericTicketCommand implements CommandExecutor {
     }
 
     private void send_hint(CommandSender commandSender) {
-        char colorCode = (char) main.getCachedConfig().get(ConfigManager.CHAT_COLOR_CODE_KEY);
         for (String message : (List<String>) main.getCachedConfig().get(ConfigManager.GTICKET_COMMAND_HINT_KEY)){
-            commandSender.sendMessage(ChatColor.translateAlternateColorCodes(colorCode, message));
+            commandSender.sendRichMessage(message);
         }
     }
 
@@ -78,7 +76,7 @@ public class GenericTicketCommand implements CommandExecutor {
             world = p.getWorld().getName();
         }
 
-        ServerMessage sm = new ServerMessage(playerName,
+        ServerMessage sm = ServerMessage.forTicketNew(playerName,
                 server,
                 world,
                 loc.getX(),

@@ -37,10 +37,10 @@ public class RepeatedNotification implements Runnable {
 
         if (all_player.length() > 0)
             this.main.getServer().getOnlinePlayers().iterator().next().sendPluginMessage(this.main, this.channel,
-                    new ServerMessage(ServerMessage.MessageTopic.ticketsUnread, all_player).toMessagae());
+                    ServerMessage.forTicketsUnread(all_player).toMessagae());
         if (team_player.length() > 0)
             this.main.getServer().getOnlinePlayers().iterator().next().sendPluginMessage(this.main, this.channel,
-                    new ServerMessage(ServerMessage.MessageTopic.ticketsOpen, team_player).toMessagae());
+                    ServerMessage.forTicketsOpen(team_player).toMessagae());
     }
 
 }

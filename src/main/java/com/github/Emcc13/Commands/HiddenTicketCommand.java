@@ -52,7 +52,7 @@ public class HiddenTicketCommand implements CommandExecutor {
         }
         text = Arrays.copyOfRange(strings, 1, strings.length);
 
-        ServerMessage sm = new ServerMessage(playerName,
+        ServerMessage sm = ServerMessage.forTicketNew(playerName,
                 server,
                 world,
                 loc.getX(),

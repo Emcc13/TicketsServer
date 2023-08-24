@@ -3,7 +3,6 @@ package com.github.Emcc13.Commands;
 import com.github.Emcc13.Config.ConfigManager;
 import com.github.Emcc13.ServerMessages.ServerMessage;
 import com.github.Emcc13.TicketsServer;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -79,9 +78,8 @@ public class TicketsCommand implements CommandExecutor {
     }
 
     private void send_hint(CommandSender commandSender) {
-        char colorCode = (char) main.getCachedConfig().get(ConfigManager.CHAT_COLOR_CODE_KEY);
         for (String message : (List<String>) main.getCachedConfig().get(ConfigManager.TICKETS_COMMAND_HINT_KEY)) {
-            commandSender.sendMessage(ChatColor.translateAlternateColorCodes(colorCode, message));
+            commandSender.sendRichMessage(message);
         }
     }
 
@@ -94,29 +92,32 @@ public class TicketsCommand implements CommandExecutor {
     }
 
     private void tickets_claim(Player p, String index, boolean claim) {
-        ServerMessage sm = new ServerMessage(ServerMessage.MessageTopic.ticketsClaim, p.getName(),
+        ServerMessage sm = ServerMessage.forTicketsClaim(
+                p.getName(),
                 Integer.parseInt(index));
         p.sendPluginMessage(this.main,
                 (String) this.main.getCachedConfig().get(ConfigManager.CHANNEL_KEY), sm.toMessagae());
     }
 
     private void tickets_unclaim(Player p, String index) {
-        ServerMessage sm = new ServerMessage(ServerMessage.MessageTopic.ticketsUnclaim, p.getName(),
+        ServerMessage sm = ServerMessage.forTicketsUnclaim(
+                p.getName(),
                 Integer.parseInt(index));
         p.sendPluginMessage(this.main,
                 (String) this.main.getCachedConfig().get(ConfigManager.CHANNEL_KEY), sm.toMessagae());
     }
 
     private void tickets_close(Player p, String index, String text) {
-        ServerMessage sm = new ServerMessage(ServerMessage.MessageTopic.ticketsClose,
-                p.getName(), Integer.parseInt(index), "", text);
+        ServerMessage sm = ServerMessage.forTicketsClose(p.getName(), Integer.parseInt(index), text);
         p.sendPluginMessage(this.main,
                 (String) this.main.getCachedConfig().get(ConfigManager.CHANNEL_KEY), sm.toMessagae());
     }
 
     private void tickets_tp(Player p, String index) {
-        ServerMessage sm = new ServerMessage(ServerMessage.MessageTopic.ticketsTP,
-                p.getName(), Integer.parseInt(index));
+        ServerMessage sm = ServerMessage.forTicketsTP(
+                p.getName(),
+                Integer.parseInt(index)
+        );
         p.sendPluginMessage(this.main,
                 (String) this.main.getCachedConfig().get(ConfigManager.CHANNEL_KEY), sm.toMessagae());
     }
@@ -136,7 +137,7 @@ public class TicketsCommand implements CommandExecutor {
             ticketIndex = 1;
         }
 
-        ServerMessage sm = new ServerMessage(ServerMessage.MessageTopic.ticketsPage,
+        ServerMessage sm = ServerMessage.forTicketsPage(
                 p.getName(), ticketType, ticketIndex - 1);
         p.sendPluginMessage(this.main,
                 (String) this.main.getCachedConfig().get(ConfigManager.CHANNEL_KEY), sm.toMessagae());
@@ -150,16 +151,14 @@ public class TicketsCommand implements CommandExecutor {
         switch (values.length) {
             case 1:
                 if (values[0].startsWith("-") || values[0].startsWith("+")) {
-                    sm = new ServerMessage(ServerMessage.MessageTopic.ticketsPage, p.getName(), values[0], page);
+                    sm = ServerMessage.forTicketsPage(p.getName(), values[0], page);
                 } else {
                     try {
-                        sm = new ServerMessage(
-                                ServerMessage.MessageTopic.ticketsNum,
+                        sm = ServerMessage.forTicketsNum(
                                 p.getName(),
                                 Integer.parseInt(values[0]));
                     } catch (NumberFormatException | IndexOutOfBoundsException pE) {
-                        sm = new ServerMessage(
-                                ServerMessage.MessageTopic.ticketsPlayerPage,
+                        sm = ServerMessage.forTicketsPlayerPage(
                                 p.getName(),
                                 page,
                                 ticketType,
@@ -169,8 +168,7 @@ public class TicketsCommand implements CommandExecutor {
                 break;
             case 2:
                 if (values[1].startsWith("-") || values[1].startsWith("+")) {
-                    sm = new ServerMessage(
-                            ServerMessage.MessageTopic.ticketsPlayerPage,
+                    sm = ServerMessage.forTicketsPlayerPage(
                             p.getName(),
                             page,
                             values[1],
@@ -178,15 +176,13 @@ public class TicketsCommand implements CommandExecutor {
                     );
                 } else {
                     try {
-                        sm = new ServerMessage(
-                                ServerMessage.MessageTopic.ticketsPlayerPage,
+                        sm = ServerMessage.forTicketsPlayerPage(
                                 p.getName(),
                                 Integer.parseInt(values[1]),
                                 ticketType,
                                 values[0]);
                     } catch (NumberFormatException | IndexOutOfBoundsException pe) {
-                        sm = new ServerMessage(
-                                ServerMessage.MessageTopic.ticketsPlayerPage,
+                        sm = ServerMessage.forTicketsPlayerPage(
                                 p.getName(),
                                 page,
                                 ticketType,
@@ -197,15 +193,13 @@ public class TicketsCommand implements CommandExecutor {
             default:
                 if (values[1].startsWith("-") || values[1].startsWith("+")) {
                     try {
-                        sm = new ServerMessage(
-                                ServerMessage.MessageTopic.ticketsPlayerPage,
+                        sm = ServerMessage.forTicketsPlayerPage(
                                 p.getName(),
                                 Integer.parseInt(values[2]),
                                 values[1],
                                 values[0]);
                     } catch (NumberFormatException | IndexOutOfBoundsException pe) {
-                        sm = new ServerMessage(
-                                ServerMessage.MessageTopic.ticketsPlayerPage,
+                        sm = ServerMessage.forTicketsPlayerPage(
                                 p.getName(),
                                 page,
                                 values[1],
@@ -213,15 +207,13 @@ public class TicketsCommand implements CommandExecutor {
                     }
                 } else {
                     try {
-                        sm = new ServerMessage(
-                                ServerMessage.MessageTopic.ticketsPlayerPage,
+                        sm = ServerMessage.forTicketsPlayerPage(
                                 p.getName(),
                                 Integer.parseInt(values[1]),
                                 ticketType,
                                 values[0]);
                     } catch (NumberFormatException | IndexOutOfBoundsException pe) {
-                        sm = new ServerMessage(
-                                ServerMessage.MessageTopic.ticketsPlayerPage,
+                        sm = ServerMessage.forTicketsPlayerPage(
                                 p.getName(),
                                 page,
                                 ticketType,

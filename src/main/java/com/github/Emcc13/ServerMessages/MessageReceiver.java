@@ -6,9 +6,6 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 
-import java.util.LinkedList;
-import java.util.List;
-
 public class MessageReceiver implements PluginMessageListener {
     private TicketsServer main;
 
@@ -19,7 +16,7 @@ public class MessageReceiver implements PluginMessageListener {
     @Override
     public void onPluginMessageReceived(String channel, Player player, byte[] message) {
         if (channel.equals(main.getCachedConfig().get(ConfigManager.CHANNEL_KEY))) {
-            ServerMessage sm = new ServerMessage(message);
+            ServerMessage sm = ServerMessage.fromBytes(message);
             if (sm.getTopic() == ServerMessage.MessageTopic.tpPos) {
                 Location loc = new Location(main.getServer().getWorld(sm.getWorld()),
                         sm.getPosX(), sm.getPosY(), sm.getPosZ(),
@@ -32,14 +29,11 @@ public class MessageReceiver implements PluginMessageListener {
                 }
             } else if (sm.getTopic() == ServerMessage.MessageTopic.ticketNotify) {
                 String permission = (String) this.main.getCachedConfig().get(ConfigManager.TEAM_PERMISSION_KEY);
-//                List<String> playerNames = new LinkedList<>();
                 for (Player p : this.main.getServer().getOnlinePlayers()) {
                     if (p.hasPermission(permission) || p.isOp()) {
-//                        playerNames.add(p.getName());
-                        p.spigot().sendMessage(sm.getTextComponent());
+                        p.sendRichMessage(sm.getMessage());
                     }
                 }
-//                ServerMessage reply = new ServerMessage(ServerMessage.MessageTopic.ticketNotify, String.join(" ", playerNames), sm.getTextComponent());
             }
         }
     }

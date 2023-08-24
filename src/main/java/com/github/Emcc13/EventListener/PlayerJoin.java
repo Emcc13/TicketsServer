@@ -10,7 +10,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import javax.swing.text.html.HTMLDocument;
 import java.util.NoSuchElementException;
 
 public class PlayerJoin implements Listener {
@@ -20,7 +19,7 @@ public class PlayerJoin implements Listener {
     }
 
     @EventHandler
-    boolean onPlayerJoin(PlayerJoinEvent event){
+    void onPlayerJoin(PlayerJoinEvent event){
         Location location = ticketsServer.getTeleportLocation(event.getPlayer().getName());
         if (location != null){
             event.getPlayer().teleport(location);
@@ -31,7 +30,7 @@ public class PlayerJoin implements Listener {
         String tPermission = (String) ts.getCachedConfig().get(ConfigManager.TEAM_PERMISSION_KEY);
         String pPermission = (String) ts.getCachedConfig().get(ConfigManager.PLAYER_PERMISSION_KEY);
         if (p.hasPermission(tPermission) || p.isOp()){
-            ServerMessage sm = new ServerMessage(ServerMessage.MessageTopic.ticketsOpen, p.getName());
+            ServerMessage sm = ServerMessage.forTicketsOpen(p.getName());
             Bukkit.getScheduler().runTaskLaterAsynchronously(ts, new Runnable() {
                 @Override
                 public void run() {
@@ -44,7 +43,7 @@ public class PlayerJoin implements Listener {
             }, 5*20);
         }
         if (p.hasPermission(pPermission) || p.isOp()){
-            ServerMessage sm = new ServerMessage(ServerMessage.MessageTopic.ticketsUnread, p.getName());
+            ServerMessage sm = ServerMessage.forTicketsUnread(p.getName());
             Bukkit.getScheduler().runTaskLaterAsynchronously(ts, new Runnable() {
                         @Override
                         public void run() {
@@ -56,6 +55,6 @@ public class PlayerJoin implements Listener {
                         }
                     }, 5 * 20);
         }
-        return false;
+        return;
     }
 }

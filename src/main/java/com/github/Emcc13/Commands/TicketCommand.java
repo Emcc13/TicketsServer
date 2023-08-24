@@ -3,7 +3,6 @@ package com.github.Emcc13.Commands;
 import com.github.Emcc13.Config.ConfigManager;
 import com.github.Emcc13.ServerMessages.ServerMessage;
 import com.github.Emcc13.TicketsServer;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -54,15 +53,14 @@ public class TicketCommand implements CommandExecutor {
     }
 
     private void send_hint(CommandSender commandSender) {
-        char colorCode = (char) main.getCachedConfig().get(ConfigManager.CHAT_COLOR_CODE_KEY);
         for (String message : (List<String>) main.getCachedConfig().get(ConfigManager.TICKET_COMMAND_HINT_KEY)){
-            commandSender.sendMessage(ChatColor.translateAlternateColorCodes(colorCode, message));
+            commandSender.sendRichMessage(message);
         }
     }
 
     private void new_ticket(Player p, String text) {
         Location loc = p.getLocation();
-        ServerMessage sm = new ServerMessage(p.getName(),
+        ServerMessage sm = ServerMessage.forTicketNew(p.getName(),
                 p.getServer().getName(),
                 p.getWorld().getName(),
                 loc.getX(),
@@ -79,14 +77,14 @@ public class TicketCommand implements CommandExecutor {
     }
 
     private void ticket_list(Player p, String index) {
-        ServerMessage sm = new ServerMessage(ServerMessage.MessageTopic.ticketList, p.getName(),
+        ServerMessage sm = ServerMessage.forTicketList(p.getName(),
                 Integer.parseInt(index)-1);
         p.sendPluginMessage(this.main,
                 (String) this.main.getCachedConfig().get(ConfigManager.CHANNEL_KEY), sm.toMessagae());
     }
 
     private void ticket_read(Player p, String index) {
-        ServerMessage sm = new ServerMessage(ServerMessage.MessageTopic.ticketRead, p.getName(),
+        ServerMessage sm = ServerMessage.forTicketRead(p.getName(),
                 Integer.parseInt(index));
         p.sendPluginMessage(this.main,
                 (String) this.main.getCachedConfig().get(ConfigManager.CHANNEL_KEY), sm.toMessagae());

@@ -89,6 +89,7 @@ public class TicketsServer extends JavaPlugin implements Listener {
     }
 
     private void registerChannel() {
+
         getServer().getMessenger().
                 registerOutgoingPluginChannel(this,
                         (String) cachedConfig.get(ConfigManager.CHANNEL_KEY));

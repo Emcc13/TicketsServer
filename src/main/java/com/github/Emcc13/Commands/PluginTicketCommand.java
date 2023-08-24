@@ -45,7 +45,7 @@ public class PluginTicketCommand implements CommandExecutor {
             server = String.valueOf(this.main.getServer().getPort());
             world = p.getWorld().getName();
         }
-        ServerMessage sm = new ServerMessage(playerName,
+        ServerMessage sm = ServerMessage.forTicketNew(playerName,
                 server,
                 world,
                 loc.getX(),
