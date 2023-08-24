@@ -1,7 +1,7 @@
 name: TicketsServer
 author: Emcc13
 description: TicketsServer
-version: 0.6.1
+version: 0.7
 depend: [Essentials]
 api-version: 1.18
 
